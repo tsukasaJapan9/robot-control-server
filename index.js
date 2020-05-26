@@ -16,6 +16,25 @@ client.on('message', function (topic, message) {
     console.log(message.toString());
 });
 
+function sendCommand(command) {
+    switch (command) {
+        case "forward":
+            forward();
+            break;
+        case "backward":
+            backward();
+            break;
+        case "right":
+            right();
+            break;
+        case "left":
+            left();
+            break;
+        default:
+            break;
+    }
+}
+
 function forward() {
     client.publish('robot/command', '1');
 }
@@ -65,7 +84,8 @@ const server = http.createServer((req, res) => {
             }).on('end', () => {
                 const decoded = decodeURIComponent(rawData);
                 const command = qs.parse(decoded);
-                console.log("command: " + command["command"])
+                console.log("command: " + command["command"]);
+                sendCommand(command);
                 res.end();
             });
             break;

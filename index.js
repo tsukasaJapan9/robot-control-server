@@ -4,12 +4,9 @@ const http = require('http');
 const fs = require('fs');
 const url = require('url');
 const mqtt = require('mqtt');
-const keypress = require('keypress');
+const qs = require('querystring');
 const client  = mqtt.connect('mqtt://localhost');
   
-process.stdin.setRawMode(true);
-process.stdin.resume();
-
 // MQTT
 client.subscribe('robot/event');
 client.publish('robot/command', 'hello');
@@ -34,35 +31,6 @@ function right() {
 function left() {
     client.publish('robot/command', '4');
 }
-
-// key入力設定
-keypress(process.stdin);
-
-process.stdin.on('keypress', function (ch, key) {
-    　//Ctrl+c
-    if (key && key.ctrl && key.name == 'c') {
-        process.stdin.exit()
-    }
-
-    if (key && key.name == 'up') {
-        console.log("up")
-        forward();
-    }
-    if (key && key.name == 'down') {
-        console.log("down")
-        backward();
-    }
-    if (key && key.name == 'right') {
-        console.log("right")
-        right();
-    }
-
-    if (key && key.name == 'left') {
-        console.log("left")
-        left();
-    }
-});
-
 
 // web server
 const server = http.createServer((req, res) => {
@@ -91,7 +59,16 @@ const server = http.createServer((req, res) => {
             }
             break;
         case 'POST':
-            console.log('post')
+            let rawData = '';
+            req.on('data', (chunk) => {
+                rawData = rawData + chunk;
+            }).on('end', () => {
+                const decoded = decodeURIComponent(rawData);
+                const command = qs.parse(decoded);
+                console.log("command: " + command["command"])
+                res.end();
+            });
+            break;
         default:
             break;
     }
@@ -101,9 +78,7 @@ const server = http.createServer((req, res) => {
     console.error('[' + new Date() + '] Client error', e)       
 });
 
-const port = 8000;
+const port = 9999;
 server.listen(port, () => {
     console.log('listening on ' + port)
 });
-
-// client.end();

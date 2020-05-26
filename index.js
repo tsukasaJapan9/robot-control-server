@@ -98,7 +98,7 @@ const server = http.createServer((req, res) => {
     console.error('[' + new Date() + '] Client error', e)       
 });
 
-const port = 9999;
+const port = process.env.PORT || 9999;
 server.listen(port, () => {
     console.log('listening on ' + port)
 });

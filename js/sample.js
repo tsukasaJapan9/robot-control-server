@@ -31,7 +31,8 @@ window.onload = function () {
     };
 
     function post(command) {
-        xhr.open('POST', 'http://localhost:9999/', true);
+        // xhr.open('POST', 'http://localhost:9999/', true);
+        xhr.open('POST', 'https://robot-control-server.herokuapp.com/', true);
         xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
         xhr.send("command=" + command);
     }    

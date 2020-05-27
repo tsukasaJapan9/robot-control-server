@@ -6,24 +6,33 @@ window.onload = function () {
     // サーバからのデータ受信を行った際の動作
     xhr.onload = function (e) {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            var answer = document.getElementById('answer');
-            answer.value = xhr.responseText;
+            // nothing to do
         }
     };
 
     document.getElementById('forward').onclick = () => {
         console.log("forward");
-        post()
+        post("forward");
     };
 
     document.getElementById('backward').onclick = () => {
-        console.log("bachward");
-        post()
+        console.log("backward");
+        post("backward");
     };
-};
 
-function post() {
-    xhr.open('POST', 'localhost:9999', true);
-    xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
-    xhr.send("command=forward");
-}
+    document.getElementById('right').onclick = () => {
+        console.log("right");
+        post("right");
+    };
+
+    document.getElementById('left').onclick = () => {
+        console.log("left");
+        post("left");
+    };
+
+    function post(command) {
+        xhr.open('POST', 'http://localhost:9999/', true);
+        xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
+        xhr.send("command=" + command);
+    }    
+};

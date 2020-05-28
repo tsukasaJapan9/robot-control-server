@@ -8,6 +8,23 @@ const qs = require('querystring');
 // const BlynkLib = require('blynk-library');
 const client  = mqtt.connect('mqtt://localhost');
 
+/*
+blynkのnode向けライブラリはnodeを立ち上げたサーバをデバイスとして扱う(m5stackと同じようなあつかい)
+ここにあるように
+https://www.npmjs.com/package/blynk-library
+
+v1.on('write', function(param) {
+  console.log('V1:', param);
+});
+ 
+v9.on('read', function() {
+  v9.write(new Date().getSeconds());
+});
+
+このような書き方しかできず、基本的にはアプリからreadされた、writeされたということを検知して
+なにか値を返したり、処理をしたりといったことしかできず、node側をappと同じように扱うことはできない
+*/
+
 // blynk
 // const blynk = new BlynkLib.Blynk(process.env.BLYNK_TOKEN);
 // const v0 = new blynk.VirtualPin(0);

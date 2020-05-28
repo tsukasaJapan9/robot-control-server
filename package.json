@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "blynk-library": "^0.5.4",
     "keypress": "^0.2.1",
     "mqtt": "^4.1.0"
   },

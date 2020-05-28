@@ -5,15 +5,15 @@ const fs = require('fs');
 const url = require('url');
 const mqtt = require('mqtt');
 const qs = require('querystring');
-const BlynkLib = require('blynk-library');
+// const BlynkLib = require('blynk-library');
 const client  = mqtt.connect('mqtt://localhost');
 
 // blynk
-const blynk = new BlynkLib.Blynk(process.env.BLYNK_TOKEN);
-const v0 = new blynk.VirtualPin(0);
-const v1 = new blynk.VirtualPin(1);
-const v2 = new blynk.VirtualPin(2);
-const v3 = new blynk.VirtualPin(3);
+// const blynk = new BlynkLib.Blynk(process.env.BLYNK_TOKEN);
+// const v0 = new blynk.VirtualPin(0);
+// const v1 = new blynk.VirtualPin(1);
+// const v2 = new blynk.VirtualPin(2);
+// const v3 = new blynk.VirtualPin(3);
   
 // MQTT
 client.subscribe('robot/event');
@@ -27,18 +27,16 @@ client.on('message', function (topic, message) {
 function sendCommand(command) {
     switch (command) {
         case "forward":
-            v0.write(1);            
-            v0.write(0);
-            // forward();
+            forward();
             break;
         case "backward":
-            // backward();
+            backward();
             break;
         case "right":
-            // right();
+            right();
             break;
         case "left":
-            // left();
+            left();
             break;
         default:
             break;

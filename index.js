@@ -3,78 +3,6 @@
 const http = require('http');
 const fs = require('fs');
 const url = require('url');
-const mqtt = require('mqtt');
-const qs = require('querystring');
-// const BlynkLib = require('blynk-library');
-const client  = mqtt.connect('mqtt://localhost');
-
-/*
-blynkのnode向けライブラリはnodeを立ち上げたサーバをデバイスとして扱う(m5stackと同じようなあつかい)
-ここにあるように
-https://www.npmjs.com/package/blynk-library
-
-v1.on('write', function(param) {
-  console.log('V1:', param);
-});
- 
-v9.on('read', function() {
-  v9.write(new Date().getSeconds());
-});
-
-このような書き方しかできず、基本的にはアプリからreadされた、writeされたということを検知して
-なにか値を返したり、処理をしたりといったことしかできず、node側をappと同じように扱うことはできない
-*/
-
-// blynk
-// const blynk = new BlynkLib.Blynk(process.env.BLYNK_TOKEN);
-// const v0 = new blynk.VirtualPin(0);
-// const v1 = new blynk.VirtualPin(1);
-// const v2 = new blynk.VirtualPin(2);
-// const v3 = new blynk.VirtualPin(3);
-  
-// MQTT
-client.subscribe('robot/event');
-client.publish('robot/command', 'hello');
-
-client.on('message', function (topic, message) {
-    // message is Buffer
-    console.log(message.toString());
-});
-
-function sendCommand(command) {
-    switch (command) {
-        case "forward":
-            forward();
-            break;
-        case "backward":
-            backward();
-            break;
-        case "right":
-            right();
-            break;
-        case "left":
-            left();
-            break;
-        default:
-            break;
-    }
-}
-
-function forward() {
-    client.publish('robot/command', '1');
-}
-
-function backward() {
-    client.publish('robot/command', '2');
-}
-
-function right() {
-    client.publish('robot/command', '3');
-}
-
-function left() {
-    client.publish('robot/command', '4');
-}
 
 // web server
 const server = http.createServer((req, res) => {
@@ -101,18 +29,6 @@ const server = http.createServer((req, res) => {
                 const rs = fs.createReadStream(path);
                 rs.pipe(res);
             }
-            break;
-        case 'POST':
-            let rawData = '';
-            req.on('data', (chunk) => {
-                rawData = rawData + chunk;
-            }).on('end', () => {
-                const decoded = decodeURIComponent(rawData);
-                const command = qs.parse(decoded);
-                console.log("command: " + command["command"]);
-                sendCommand(command);
-                res.end();
-            });
             break;
         default:
             break;

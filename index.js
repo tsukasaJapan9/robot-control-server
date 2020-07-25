@@ -28,6 +28,9 @@ const server = http.createServer((req, res) => {
             } else if (ext == '/app') {
                 const rs = fs.createReadStream('./app.html');
                 rs.pipe(res);
+            } else if (ext == '/ble') {
+                const rs = fs.createReadStream('./ble.html');
+                rs.pipe(res);
             } else if (ext == 'js') {
                 const rs = fs.createReadStream(path);
                 rs.pipe(res);

@@ -27,42 +27,40 @@ async function main() {
 
 main();
 
-let session_id = document.getElementById("session_id").value;
-
 window.startSession = () => {
-        // サーバが投げてくるofferを受け取る
-        fetch(`https://webrtc-sdp-exchanger.appspot.com/sessions/${session_id}/offer`, {
-            method: "GET",
-            mode: "cors",
-            headers: new Headers({"Content-Type": "application/json; charset=utf-8"}),
-        }).then((response) => {
-            console.log("step2");
-            console.log(response);
-            if (response.ok) {
-                return response.json();
-            }
-            return Promise.reject(new Error("invalid response"));
-        }).then((json) => {
-            console.log("catch session desc");
-            try {
-                console.log(json.session_description)
-                pc.setRemoteDescription(new RTCSessionDescription(json.session_description));
-                pc.createAnswer().then((d) => {
-                    pc.setLocalDescription(d)
-                    fetch(`https://webrtc-sdp-exchanger.appspot.com/sessions/${session_id}`, {
-                        method: "POST",
-                        mode: "cors",
-                        headers: new Headers({"Content-Type": "application/json; charset=utf-8"}),
-                        body: JSON.stringify({session_description: d, session_id: session_id}),
-                    }).then((response) => {
-                        console.log("step3");
-                        console.log(response);
-                    }).catch(err => console.error);
-                }).catch(log);
-            } catch (e) {
-                alert(e);
-            }
-
-            document.getElementById('startSession').disabled = "true";
-        }).catch(err => console.error);
+    let session_id = document.getElementById("session_id").value;
+    // サーバが投げてくるofferを受け取る
+    fetch(`https://webrtc-sdp-exchanger.appspot.com/sessions/${session_id}/offer`, {
+        method: "GET",
+        mode: "cors",
+        headers: new Headers({"Content-Type": "application/json; charset=utf-8"}),
+    }).then((response) => {
+        console.log("step2");
+        console.log(response);
+        if (response.ok) {
+            return response.json();
+        }
+        return Promise.reject(new Error("invalid response"));
+    }).then((json) => {
+        console.log("catch session desc");
+        try {
+            console.log(json.session_description)
+            pc.setRemoteDescription(new RTCSessionDescription(json.session_description));
+            pc.createAnswer().then((d) => {
+                pc.setLocalDescription(d)
+                fetch(`https://webrtc-sdp-exchanger.appspot.com/sessions/${session_id}`, {
+                    method: "POST",
+                    mode: "cors",
+                    headers: new Headers({"Content-Type": "application/json; charset=utf-8"}),
+                    body: JSON.stringify({session_description: d, session_id: session_id}),
+                }).then((response) => {
+                    console.log("step3");
+                    console.log(response);
+                }).catch(err => console.error);
+            }).catch(log);
+        } catch (e) {
+            alert(e);
+        }
+        document.getElementById('startSession').disabled = "true";
+    }).catch(err => console.error);
 };

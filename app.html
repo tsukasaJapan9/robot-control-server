@@ -20,6 +20,7 @@
 
     pc.ontrack = (event) => {
         var el = document.createElement(event.track.kind);
+        console.log(event)
         el.srcObject = event.streams[0];
         el.autoplay = true;
         el.controls = true;
@@ -42,7 +43,8 @@
     };
 
     let params = new URLSearchParams(document.location.search.substring(1));
-    let session_id = params.get("session");
+    // let session_id = params.get("session");
+    let session_id = "abc"
 
     pc.oniceconnectionstatechange = (e) => {
         log('ice connection state: ' + pc.iceConnectionState);

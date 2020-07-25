@@ -40,6 +40,12 @@
             pc.addTrack(track, stream);
         }
 
+        pc.ondatachannel = event => {
+            const dc = event.channel
+            dc.onmessage = ev => {
+                console.log(`peer: [${ev.data}]`)
+            }
+        }
     }
 
     main();

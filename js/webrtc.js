@@ -1,36 +1,21 @@
 'use strict;'
 
+
+//--------------------------------------------------
+// handling button event
+//--------------------------------------------------
+const waitForButtonClick = button => {
+    return new Promise(resolve => {
+        button.addEventListener("click", () => {
+            resolve()
+        }, {once: true})
+    })
+}
+
 //--------------------------------------------------
 // webRTC
 //--------------------------------------------------
-let pc = new RTCPeerConnection({
-    iceServers: [{urls: 'stun:stun.l.google.com:19302'}]
-});
-
-let log = msg => {
-    document.getElementById('div').innerHTML += msg + '<br>'
-};
-
-async function main() {
-    const video = document.getElementById('localVideo');
-    stream = await navigator.mediaDevices.getUserMedia({video: true, audio: false})
-    video.srcObject = stream 
-
-    for (const track of stream.getTracks()) {
-        pc.addTrack(track, stream);
-    }
-
-    pc.ondatachannel = event => {
-        const dc = event.channel
-        dc.onmessage = ev => {
-            console.log(`peer: [${ev.data}]`)
-        }
-    }
-}
-
-main();
-
-window.startSession = () => {
+async function startSession(pc) {
     let session_id = document.getElementById("session_id").value;
     // サーバが投げてくるofferを受け取る
     fetch(`https://webrtc-sdp-exchanger.appspot.com/sessions/${session_id}/offer`, {
@@ -67,6 +52,43 @@ window.startSession = () => {
         document.getElementById('startSession').disabled = "true";
     }).catch(err => console.error);
 };
+
+
+//--------------------------------------------------
+// main
+//--------------------------------------------------
+let log = msg => {
+    document.getElementById('div').innerHTML += msg + '<br>'
+};
+
+async function main() {
+    let pc = new RTCPeerConnection({
+        iceServers: [{urls: 'stun:stun.l.google.com:19302'}]
+    });
+    
+    const video = document.getElementById('localVideo');
+    stream = await navigator.mediaDevices.getUserMedia({video: true, audio: false})
+    video.srcObject = stream 
+
+    for (const track of stream.getTracks()) {
+        pc.addTrack(track, stream);
+    }
+
+    pc.ondatachannel = event => {
+        const dc = event.channel
+        dc.onmessage = ev => {
+            console.log(`peer: [${ev.data}]`)
+        }
+    }
+
+    const startButton = document.getElementById("startSession")
+    await waitForButtonClick(startButton)
+    console.log("clicked!!")
+    await startSession(pc)
+
+}
+
+main();
 
 //--------------------------------------------------
 //Global変数

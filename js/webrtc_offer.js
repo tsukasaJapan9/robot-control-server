@@ -46,7 +46,6 @@ async function startSession(pc) {
         })
 
         log("get answer")
-        console.log(sdp)
 
         // リモートとローカルのSDPを設定
         await pc.setRemoteDescription(new RTCSessionDescription(sdp))
@@ -60,10 +59,6 @@ async function startSession(pc) {
 // main
 //--------------------------------------------------
 async function main() {
-    let log = msg => {
-        document.getElementById('div').innerHTML += msg + '<br>'
-    };
-    
     let pc = new RTCPeerConnection({
         iceServers: [{urls: 'stun:stun.l.google.com:19302'}]
     });
@@ -78,10 +73,6 @@ async function main() {
         const remoteVideo = document.getElementById("remoteVideo");
         console.log(event)
         remoteVideo.srcObject = event.streams[0];
-        // el.autoplay = true;
-        // el.controls = true;
-        // el.setAttribute('playsinline', '');
-        // document.getElementById('remoteVideo').appendChild(el)
     };
 
     // videoをstreamに設定
@@ -89,7 +80,7 @@ async function main() {
         pc.addTrack(track, stream);
     }
 
-    // // datachannel open
+    // datachannel open
     // let dataChannel = pc.createDataChannel('foo');
     // dataChannel.onclose = () => console.log('dataChannel has closed');
     // dataChannel.onopen = () => {
@@ -129,6 +120,7 @@ async function main() {
     pc.addTransceiver('audio');
     pc.addTransceiver('video');
 
+    // これを先にやっとく必要がある
     offer = await pc.createOffer()
     await pc.setLocalDescription(offer)
 

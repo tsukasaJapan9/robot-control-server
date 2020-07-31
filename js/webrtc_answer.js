@@ -85,13 +85,13 @@ async function main() {
         pc.addTrack(track, stream);
     }
 
-    // // data channelの受信コールバックの設定
-    // pc.ondatachannel = event => {
-    //     const dc = event.channel
-    //     dc.onmessage = ev => {
-    //         console.log(`peer: [${ev.data}]`)
-    //     }
-    // }
+    // data channelの受信コールバックの設定
+    pc.ondatachannel = event => {
+        const dc = event.channel
+        dc.onmessage = ev => {
+            console.log(`peer: [${ev.data}]`)
+        }
+    }
 
     // 各種statusの監視
     pc.oniceconnectionstatechange = (e) => {

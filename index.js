@@ -23,13 +23,13 @@ const server = http.createServer((req, res) => {
     switch (req.method) {
         case 'GET':
             if (ext == '/') {
-                const rs = fs.createReadStream('./index.html');
+                const rs = fs.createReadStream('./offer.html');
                 rs.pipe(res);
             } else if (ext == '/offer') {
-                const rs = fs.createReadStream('./app.html');
+                const rs = fs.createReadStream('./offer.html');
                 rs.pipe(res);
             } else if (ext == '/answer') {
-                const rs = fs.createReadStream('./index.html');
+                const rs = fs.createReadStream('./answer.html');
                 rs.pipe(res);
             } else if (ext == '/ble') {
                 const rs = fs.createReadStream('./ble.html');

@@ -20,18 +20,20 @@ async function startSession(pc) {
     
     try {
         // サーバが投げてくるofferを受け取る
-        response = await fetch(`https://webrtc-sdp-exchanger.appspot.com/sessions/${session_id}/offer`, {
+        sdp = await fetch(`https://webrtc-sdp-exchanger.appspot.com/sessions/${session_id}/offer`, {
             method: "GET",
             mode: "cors",
             headers: new Headers({"Content-Type": "application/json; charset=utf-8"}),
         }).then((response) => {
             return response.json()
+        }).then((json) => {
+            return json.session_description
         })
     
-        console.log(response.session_description)
+        console.log(sdp)
 
         // リモートとローカルのSDPを設定
-        await pc.setRemoteDescription(new RTCSessionDescription(response.session_description))
+        await pc.setRemoteDescription(new RTCSessionDescription(sdp))
         answer = await pc.createAnswer()
         await pc.setLocalDescription(answer)
 

@@ -1,0 +1,12 @@
+.button {
+    display       : inline-block;
+    border-radius : 22%;          /* 角丸       */
+    font-size     : 16pt;        /* 文字サイズ */
+    text-align    : center;      /* 文字位置   */
+    cursor        : pointer;     /* カーソル   */
+    padding       : 11px 23px;   /* 余白       */
+    background    : #ff7f7f;     /* 背景色     */
+    color         : #ffffff;     /* 文字色     */
+    line-height   : 1em;         /* 1行の高さ  */
+    transition    : .3s;         /* なめらか変化 */
+}

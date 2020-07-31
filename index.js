@@ -37,6 +37,9 @@ const server = http.createServer((req, res) => {
             } else if (ext == 'js') {
                 const rs = fs.createReadStream(path);
                 rs.pipe(res);
+            } else if (ext == 'css') {
+                const rs = fs.createReadStream(path);
+                rs.pipe(res);
             }
             break;
         default:

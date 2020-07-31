@@ -2,21 +2,41 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <!-- <link rel="stylesheet" href="./css/design.css"> -->
+    <style type="text/css">
+        .button {
+          display       : inline-block;
+          border-radius : 22%;          /* 角丸       */
+          font-size     : 16pt;        /* 文字サイズ */
+          text-align    : center;      /* 文字位置   */
+          cursor        : pointer;     /* カーソル   */
+          padding       : 11px 23px;   /* 余白       */
+          background    : #ff7f7f;     /* 背景色     */
+          color         : #ffffff;     /* 文字色     */
+          line-height   : 1em;         /* 1行の高さ  */
+          transition    : .3s;         /* なめらか変化 */
+        }
+        .button:hover {
+        }
+    </style>
     <title>WebRTC offer example</title>
 </head>
 <body>
-    <h1>WebRTC offer example</h1>
+    <canvas id="face" width="800" height="600"></canvas>
+    <hr>
     <div>
-    <input type="text" name="session_id" id="session_id"size="15" value="abc">
-    <button id="startSession"> Start Session</button>
+    <input type="text" name="session_id" id="session_id" size="5" value="abc">
+    <button id="startSession" class="button">Start WebRTC Session</button>
     </div>
     <div>
-    <input type="text" name="command" id="command"size="15" value="wws">
-    <button id="sendCommand">send</button>
+    <input type="text" id="write_value" size="5" value="1" >
+    <button id="write" class="button">Connect BLE</button>    
+    </div>    
+    <div>
+    <input type="text" name="command" id="command"size="5" value="wws">
+    <button id="sendCommand" class="button">Send data channel</button>
     </div>
-
     <br/>
-
     <div>Local Video<br/>
     <video id="localVideo" autoplay width="320"></video>
     </div>
@@ -29,8 +49,6 @@
     <div id="div"></div>
     </div>
     <br/>
-    <input id="write_value" class="button" value="1" size="1">
-    <button id="write" class="button">Write To Robot</button>
     <hr>
     <div id="device_name"> </div>
     <div id="uuid_name"> </div>

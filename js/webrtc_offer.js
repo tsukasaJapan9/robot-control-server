@@ -23,8 +23,6 @@ const waitForButtonClick = button => {
 //--------------------------------------------------
 async function startSession(pc) {
     const session_id = document.getElementById("session_id").value;
-    offer = await pc.createOffer()
-    await pc.setLocalDescription(offer)
     
     try {
         // offerを送る
@@ -130,6 +128,9 @@ async function main() {
     // 送受信設定
     pc.addTransceiver('audio');
     pc.addTransceiver('video');
+
+    offer = await pc.createOffer()
+    await pc.setLocalDescription(offer)
 
     // startSessionボタンが押されたらsession開始
     const startButton = document.getElementById("startSession")

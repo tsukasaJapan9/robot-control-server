@@ -6,7 +6,9 @@
   "dependencies": {
     "blynk-library": "^0.5.4",
     "keypress": "^0.2.1",
-    "mqtt": "^4.1.0"
+    "mqtt": "^4.1.0",
+    "node-fetch": "^2.6.0",
+    "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {},
   "scripts": {

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>webrtc-client-example</title>
+</head>
+<body>
+    <div>
+    <input type="text" name="session_id" id="session_id"size="15" value="abc">
+    <button id="startSession"> Start Session</button>
+    </div>
+
+    <br/>
+
+    <div>Video<br/>
+    <video id="localVideo" autoplay></video>
+    </div>
+
+    <div>
+    Logs<br/>
+    <div id="div"></div>
+    </div>
+    <br/>
+    <input id="write_value" class="button" value="1" size="1">
+    <button id="write" class="button">Write To Robot</button>
+    <hr>
+    <div id="device_name"> </div>
+    <div id="uuid_name"> </div>
+    <div id="status"> </div>
+    <script type="text/javascript" src="./js/bluejelly.js"></script>
+    <script type="text/javascript" src="./js/webrtc.js"></script>
+</body>
+</html>

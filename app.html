@@ -2,36 +2,39 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>webrtc-offer-example</title>
+    <title>webrtc-example</title>
 </head>
+
 <body>
-    <h1>webrtc offer example</h1>
-    <div>
-    <input type="text" name="session_id" id="session_id"size="15" value="abc">
-    <button id="startSession"> Start Session</button>
-    </div>
+<script type="text/javascript" src="./js/webrtc_offer.js"></script>
+<div>
+<button id="startSession" disabled="true" onclick="window.startSession()"> Start Session</button>
+</div>
 
-    <br/>
+<div>
+Command: <textarea id="command"></textarea> <br/>
+<button id="sendCommand" disabled="true" onclick="window.sendCommand()"> Send Command</button>
+</div>
 
-    <div>Local Video<br/>
-    <video id="localVideo" autoplay width="320"></video>
-    </div>
-    <div>Remote Video<br/>
-    <video id="remoteVideo" autoplay width="320"></video>
-    </div>
+<br/>
 
-    <div>
-    Logs<br/>
-    <div id="div"></div>
-    </div>
-    <br/>
-    <input id="write_value" class="button" value="1" size="1">
-    <button id="write" class="button">Write To Robot</button>
-    <hr>
-    <div id="device_name"> </div>
-    <div id="uuid_name"> </div>
-    <div id="status"> </div>
-    <script type="text/javascript" src="./js/bluejelly.js"></script>
-    <script type="text/javascript" src="./js/webrtc_offer.js"></script>
+<div>Video<br/>
+<div id="remoteVideos"></div>
+</div>
+
+<div>
+Logs<br/>
+<div id="div"></div>
+</div>
+
+<!-- <script>
+    document.getElementById('command').addEventListener('keypress', (event) => {
+        console.log(event);
+        if (event.key === 'Enter') {
+            document.getElementById('sendCommand').click();
+            return false
+        }
+    });
+</script> -->
 </body>
 </html>

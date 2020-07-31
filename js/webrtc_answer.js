@@ -85,6 +85,15 @@ async function main() {
         pc.addTrack(track, stream);
     }
 
+    // datachannel open
+    let dataChannel = pc.createDataChannel('foo2');
+    dataChannel.onclose = () => console.log('dataChannel has closed');
+    dataChannel.onopen = () => {
+        console.log('dataChannel has opened');
+        document.getElementById('sendCommand').disabled = "";
+    };
+    dataChannel.onmessage = e => log(`Message from DataChannel '${dataChannel.label}' payload '${e.data}'`);
+
     // data channelの受信コールバックの設定
     pc.ondatachannel = event => {
         const dc = event.channel
@@ -116,6 +125,16 @@ async function main() {
     pc.addTransceiver('audio');
     pc.addTransceiver('video');
 
+    // data channelに送信
+    document.getElementById("sendCommand").onclick = () => {
+        let message = document.getElementById('command').value
+        if (message === '') {
+            return
+        }
+        dataChannel.send(message + '\n');
+        document.getElementById('command').value = "";
+    }
+    
     // startSessionボタンが押されたらsession開始
     const startButton = document.getElementById("startSession")
     await waitForButtonClick(startButton)

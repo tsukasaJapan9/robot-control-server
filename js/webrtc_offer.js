@@ -81,7 +81,7 @@ async function main() {
     }
 
     // datachannel open
-    let dataChannel = pc.createDataChannel('foo');
+    let dataChannel = pc.createDataChannel('foo1');
     dataChannel.onclose = () => console.log('dataChannel has closed');
     dataChannel.onopen = () => {
         console.log('dataChannel has opened');

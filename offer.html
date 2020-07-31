@@ -10,6 +10,10 @@
     <input type="text" name="session_id" id="session_id"size="15" value="abc">
     <button id="startSession"> Start Session</button>
     </div>
+    <div>
+    <input type="text" name="command" id="command"size="15" value="wws">
+    <button id="sendCommand">send</button>
+    </div>
 
     <br/>
 
@@ -33,5 +37,13 @@
     <div id="status"> </div>
     <script type="text/javascript" src="./js/bluejelly.js"></script>
     <script type="text/javascript" src="./js/webrtc_offer.js"></script>
+    <script>
+        document.getElementById('command').addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                document.getElementById('sendCommand').click();
+                return false
+            }
+        });
+    </script>
 </body>
 </html>

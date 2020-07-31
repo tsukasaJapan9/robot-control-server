@@ -81,21 +81,21 @@ async function main() {
     }
 
     // datachannel open
-    // let dataChannel = pc.createDataChannel('foo');
-    // dataChannel.onclose = () => console.log('dataChannel has closed');
-    // dataChannel.onopen = () => {
-    //     console.log('dataChannel has opened');
-    //     document.getElementById('sendCommand').disabled = "";
-    // };
-    // dataChannel.onmessage = e => log(`Message from DataChannel '${dataChannel.label}' payload '${e.data}'`);
+    let dataChannel = pc.createDataChannel('foo');
+    dataChannel.onclose = () => console.log('dataChannel has closed');
+    dataChannel.onopen = () => {
+        console.log('dataChannel has opened');
+        document.getElementById('sendCommand').disabled = "";
+    };
+    dataChannel.onmessage = e => log(`Message from DataChannel '${dataChannel.label}' payload '${e.data}'`);
 
-    // // data channelの受信コールバックの設定
-    // pc.ondatachannel = event => {
-    //     const dc = event.channel
-    //     dc.onmessage = ev => {
-    //         console.log(`peer: [${ev.data}]`)
-    //     }
-    // }
+    // data channelの受信コールバックの設定
+    pc.ondatachannel = event => {
+        const dc = event.channel
+        dc.onmessage = ev => {
+            console.log(`peer: [${ev.data}]`)
+        }
+    }
 
     // 各種statusの監視
     pc.oniceconnectionstatechange = (e) => {
@@ -123,6 +123,16 @@ async function main() {
     // これを先にやっとく必要がある
     offer = await pc.createOffer()
     await pc.setLocalDescription(offer)
+
+    // data channelに送信
+    document.getElementById("sendCommand").onclick = () => {
+        let message = document.getElementById('command').value
+        if (message === '') {
+            return
+        }
+        dataChannel.send(message + '\n');
+        document.getElementById('command').value = "";
+    }
 
     // startSessionボタンが押されたらsession開始
     const startButton = document.getElementById("startSession")

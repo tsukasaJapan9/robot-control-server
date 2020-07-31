@@ -36,7 +36,6 @@ async function startSession(pc) {
             return json.session_description
         })
     
-        console.log(sdp)
         log("get offer")
 
         // リモートとローカルのSDPを設定
@@ -69,20 +68,53 @@ async function main() {
     // videoの準備
     const video = document.getElementById('localVideo');
     stream = await navigator.mediaDevices.getUserMedia({video: true, audio: false})
-    video.srcObject = stream 
+    video.srcObject = stream
 
+    // remote videoの受信準備
+    pc.ontrack = (event) => {
+        const remoteVideo = document.getElementById("remoteVideo");
+        console.log(event)
+        if (event.track.kind == "video" && event.streams.length > 0) {
+            console.log(event.streams)
+            remoteVideo.srcObject = event.streams[0];
+        }
+    };
+    
     // videoをstreamに設定
     for (const track of stream.getTracks()) {
         pc.addTrack(track, stream);
     }
 
-    // data channelの受信コールバックの設定
-    pc.ondatachannel = event => {
-        const dc = event.channel
-        dc.onmessage = ev => {
-            console.log(`peer: [${ev.data}]`)
+    // // data channelの受信コールバックの設定
+    // pc.ondatachannel = event => {
+    //     const dc = event.channel
+    //     dc.onmessage = ev => {
+    //         console.log(`peer: [${ev.data}]`)
+    //     }
+    // }
+
+    // 各種statusの監視
+    pc.oniceconnectionstatechange = (e) => {
+        log('ice connection state: ' + pc.iceConnectionState);
+    };
+
+    pc.onnegotiationneeded = (e) => {
+        log('negotiation needed: ' + pc.iceConnectionState);
+    };
+
+    pc.onconnectionstatechange = (e) => {
+        log('connection state: ' + pc.connectionState);
+    };
+
+    pc.onicecandidate = event => {
+        if (event.candidate === null) {
+            document.getElementById('startSession').disabled = "";
         }
-    }
+    };
+    
+    // 送受信設定
+    pc.addTransceiver('audio');
+    pc.addTransceiver('video');
 
     // startSessionボタンが押されたらsession開始
     const startButton = document.getElementById("startSession")

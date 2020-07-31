@@ -58,6 +58,58 @@ document.getElementById('write').addEventListener('click', function() {
 });
 
 //--------------------------------------------------
+// 画面描画
+//--------------------------------------------------
+window.onload = ()=>{
+    const canvas = document.getElementById("face");
+    const canvas_wrapper = document.getElementById("canvas_wrapper");
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = canvas_wrapper.offsetWidth;
+	canvas.height =  canvas_wrapper.offsetHeight * 1.5;
+
+    //-------------------------------------
+    // アニメーション開始
+    //-------------------------------------
+    setInterval(() => {
+        // canvasの全領域をクリア
+        //ctx.clearRect(0, 0, board.width, board.height); // 本来は必要な部分だけクリアした方が高速
+
+        ctx.fillStyle = 'rgb(0,0,0)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // 円を描画
+        let x = canvas.width * 2 / 6
+        let y = canvas.height / 2
+        let r = canvas.width / 12
+
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, 2 * Math.PI);    // 円の描画
+        ctx.fillStyle = "White";    // 塗りつぶす色
+        ctx.fill();                  // 塗りつぶし
+
+        // 円を描画
+        x = canvas.width * 4 / 6
+        y = canvas.height / 2
+        r = canvas.width / 12
+
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, 2 * Math.PI);    // 円の描画
+        ctx.fillStyle = "White";    // 塗りつぶす色
+        ctx.fill();                  // 塗りつぶし
+
+        // //画面の端にぶつかると反転
+        // if( (x < 0) || (x >= board.width) ){
+        //     step *= -1;
+        // }
+
+        // // 座標を移動(横軸)
+        // x += step;
+        // },
+        10})  // 10msec経過する毎に実行する
+}
+
+//--------------------------------------------------
 // WebRTC
 //--------------------------------------------------
 async function startSession(pc) {

@@ -19,6 +19,45 @@ const waitForButtonClick = button => {
 }
 
 //--------------------------------------------------
+// Global
+//--------------------------------------------------
+var command = null
+
+//BlueJellyのインスタンス生成
+var ble = new BlueJelly();
+
+//--------------------------------------------------
+// BLE
+//--------------------------------------------------
+window.onload = function () {
+  //UUIDの設定
+  //ble.setUUID("UUID1", "713d0000-503e-4c75-ba94-3148f18d941e", "713d0002-503e-4c75-ba94-3148f18d941e");  //BLEnano SimpleControl rx_uuid
+  ble.setUUID("UUID2", "4fafc201-1fb5-459e-8fcc-c5c9c331914b", "beb5483e-36e1-4688-b7f5-ea07361b26a8");  //BLEnano SimpleControl tx_uuid
+}
+
+ble.onScan = function (deviceName) {
+  document.getElementById('device_name').innerHTML = deviceName;
+  document.getElementById('status').innerHTML = "found device!";
+}
+
+ble.onConnectGATT = function (uuid) {
+  console.log('> connected GATT!');
+
+  document.getElementById('uuid_name').innerHTML = uuid;
+  document.getElementById('status').innerHTML = "connected GATT!";
+}
+
+ble.onWrite = function(uuid){
+  document.getElementById('uuid_name').innerHTML = uuid;
+  document.getElementById('status').innerHTML = "written data"
+}
+
+document.getElementById('write').addEventListener('click', function() {
+    // ble.write('UUID2', document.getElementById('write_value').value);
+    ble.write('UUID2', [0x31]);
+});
+
+//--------------------------------------------------
 // WebRTC
 //--------------------------------------------------
 async function startSession(pc) {
@@ -93,7 +132,8 @@ async function main() {
     pc.ondatachannel = event => {
         const dc = event.channel
         dc.onmessage = ev => {
-            console.log(`peer: [${ev.data}]`)
+            console.log(`peer:${ev.data}`)
+            command = ev.data
         }
     }
 
@@ -142,59 +182,33 @@ async function main() {
     } catch (error) {
         console.log(error)
     }
+
+    // bleでコマンド送信
+    setInterval(() => {
+        if (command) {
+            c = command[0]
+            command = command.slice(1)
+            switch (c) {
+                case "w":
+                    log("forward")
+                    ble.write('UUID2', [0x31]);
+                    break
+                case "s":
+                    log("turn right")
+                    ble.write('UUID2', [0x33]); // back
+                    break
+                case "a":
+                    log("turn left")
+                    ble.write('UUID2', [0x34]);  //right
+                    break
+                case "z":
+                    log("back")
+                    ble.write('UUID2', [0x32]);  //left
+                    break
+            }
+        }
+    },1000);
 }
 
 main();
 
-//--------------------------------------------------
-//Global変数
-//--------------------------------------------------
-//BlueJellyのインスタンス生成
-var ble = new BlueJelly();
-
-
-//--------------------------------------------------
-//ロード時の処理
-//--------------------------------------------------
-window.onload = function () {
-  //UUIDの設定
-  //ble.setUUID("UUID1", "713d0000-503e-4c75-ba94-3148f18d941e", "713d0002-503e-4c75-ba94-3148f18d941e");  //BLEnano SimpleControl rx_uuid
-  ble.setUUID("UUID2", "4fafc201-1fb5-459e-8fcc-c5c9c331914b", "beb5483e-36e1-4688-b7f5-ea07361b26a8");  //BLEnano SimpleControl tx_uuid
-}
-
-
-//--------------------------------------------------
-//Scan後の処理
-//--------------------------------------------------
-ble.onScan = function (deviceName) {
-  document.getElementById('device_name').innerHTML = deviceName;
-  document.getElementById('status').innerHTML = "found device!";
-}
-
-
-//--------------------------------------------------
-//ConnectGATT後の処理
-//--------------------------------------------------
-ble.onConnectGATT = function (uuid) {
-  console.log('> connected GATT!');
-
-  document.getElementById('uuid_name').innerHTML = uuid;
-  document.getElementById('status').innerHTML = "connected GATT!";
-}
-
-//--------------------------------------------------
-//Write後の処理
-//--------------------------------------------------
-ble.onWrite = function(uuid){
-  document.getElementById('uuid_name').innerHTML = uuid;
-  document.getElementById('status').innerHTML = "written data"
-}
-
-
-//-------------------------------------------------
-//ボタンが押された時のイベント登録
-//--------------------------------------------------
-document.getElementById('write').addEventListener('click', function() {
-    // ble.write('UUID2', document.getElementById('write_value').value);
-    ble.write('UUID2', [0x31]);
-});

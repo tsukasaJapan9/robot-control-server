@@ -25,8 +25,11 @@ const server = http.createServer((req, res) => {
             if (ext == '/') {
                 const rs = fs.createReadStream('./index.html');
                 rs.pipe(res);
-            } else if (ext == '/app') {
+            } else if (ext == '/offer') {
                 const rs = fs.createReadStream('./app.html');
+                rs.pipe(res);
+            } else if (ext == '/answer') {
+                const rs = fs.createReadStream('./index.html');
                 rs.pipe(res);
             } else if (ext == '/ble') {
                 const rs = fs.createReadStream('./ble.html');

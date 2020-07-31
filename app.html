@@ -6,18 +6,14 @@
 </head>
 
 <body>
-<script type="text/javascript" src="./js/webrtc_offer.js"></script>
 <div>
-<button id="startSession" disabled="true" onclick="window.startSession()"> Start Session</button>
+<button id="startSession" disabled="true"> Start Session</button>
 </div>
 
 <div>
 Command: <textarea id="command"></textarea> <br/>
-<button id="sendCommand" disabled="true" onclick="window.sendCommand()"> Send Command</button>
 </div>
-
 <br/>
-
 <div>Video<br/>
 <div id="remoteVideos"></div>
 </div>
@@ -26,15 +22,6 @@ Command: <textarea id="command"></textarea> <br/>
 Logs<br/>
 <div id="div"></div>
 </div>
-
-<!-- <script>
-    document.getElementById('command').addEventListener('keypress', (event) => {
-        console.log(event);
-        if (event.key === 'Enter') {
-            document.getElementById('sendCommand').click();
-            return false
-        }
-    });
-</script> -->
+<script type="text/javascript" src="./js/webrtc_offer.js"></script>
 </body>
 </html>

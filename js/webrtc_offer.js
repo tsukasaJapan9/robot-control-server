@@ -21,52 +21,9 @@ const waitForButtonClick = button => {
 //--------------------------------------------------
 // WebRTC
 //--------------------------------------------------
-let pc = new RTCPeerConnection({
-    iceServers: [
-        {
-            urls: 'stun:stun.l.google.com:19302'
-        }
-    ]
-});
+async function startSession(pc) {
+    let session_id = "abc"
 
-pc.ontrack = (event) => {
-    var el = document.createElement(event.track.kind);
-    console.log(event)
-    el.srcObject = event.streams[0];
-    el.autoplay = true;
-    el.controls = true;
-    el.setAttribute('playsinline', '');
-
-    document.getElementById('remoteVideos').appendChild(el)
-};
-
-
-let session_id = "abc"
-
-pc.oniceconnectionstatechange = (e) => {
-    log('ice connection state: ' + pc.iceConnectionState);
-};
-
-pc.onnegotiationneeded = (e) => {
-    log('negotiation needed: ' + pc.iceConnectionState);
-};
-
-pc.onconnectionstatechange = (e) => {
-    log('connection state: ' + pc.connectionState);
-};
-
-pc.onicecandidate = event => {
-    if (event.candidate === null) {
-        document.getElementById('startSession').disabled = "";
-    }
-};
-
-// Offer to receive 1 audio, and 2 video tracks
-pc.addTransceiver('audio');
-pc.addTransceiver('video');
-pc.createOffer().then(d => pc.setLocalDescription(d)).catch(log);
-
-window.startSession = () => {
     fetch(`https://webrtc-sdp-exchanger.appspot.com/sessions/${session_id}`, {
         method: "POST",
         mode: "cors",
@@ -97,3 +54,57 @@ window.startSession = () => {
 
     }).catch(err => console.error);
 };
+
+//--------------------------------------------------
+// main
+//--------------------------------------------------
+async function main() {
+    let pc = new RTCPeerConnection({
+        iceServers: [{urls: 'stun:stun.l.google.com:19302'}]
+    });
+    
+    pc.ontrack = (event) => {
+        var el = document.createElement(event.track.kind);
+        console.log(event)
+        el.srcObject = event.streams[0];
+        el.autoplay = true;
+        el.controls = true;
+        el.setAttribute('playsinline', '');
+    
+        document.getElementById('remoteVideos').appendChild(el)
+    };
+        
+    pc.oniceconnectionstatechange = (e) => {
+        log('ice connection state: ' + pc.iceConnectionState);
+    };
+    
+    pc.onnegotiationneeded = (e) => {
+        log('negotiation needed: ' + pc.iceConnectionState);
+    };
+    
+    pc.onconnectionstatechange = (e) => {
+        log('connection state: ' + pc.connectionState);
+    };
+    
+    pc.onicecandidate = event => {
+        if (event.candidate === null) {
+            document.getElementById('startSession').disabled = "";
+        }
+    };
+    
+    // Offer to receive 1 audio, and 2 video tracks
+    pc.addTransceiver('audio');
+    pc.addTransceiver('video');
+    pc.createOffer().then(d => pc.setLocalDescription(d)).catch(log);
+    
+    // startSessionボタンが押されたらsession開始
+    const startButton = document.getElementById("startSession")
+    await waitForButtonClick(startButton)
+    try {
+        await startSession(pc)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+main();

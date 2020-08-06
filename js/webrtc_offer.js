@@ -27,37 +27,6 @@ var command = null
 var ble = new BlueJelly();
 
 //--------------------------------------------------
-// BLE
-//--------------------------------------------------
-window.onload = function () {
-  //UUIDの設定
-  //ble.setUUID("UUID1", "713d0000-503e-4c75-ba94-3148f18d941e", "713d0002-503e-4c75-ba94-3148f18d941e");  //BLEnano SimpleControl rx_uuid
-  ble.setUUID("UUID2", "4fafc201-1fb5-459e-8fcc-c5c9c331914b", "beb5483e-36e1-4688-b7f5-ea07361b26a8");  //BLEnano SimpleControl tx_uuid
-}
-
-ble.onScan = function (deviceName) {
-  document.getElementById('device_name').innerHTML = deviceName;
-  document.getElementById('status').innerHTML = "found device!";
-}
-
-ble.onConnectGATT = function (uuid) {
-  console.log('> connected GATT!');
-
-  document.getElementById('uuid_name').innerHTML = uuid;
-  document.getElementById('status').innerHTML = "connected GATT!";
-}
-
-ble.onWrite = function(uuid){
-  document.getElementById('uuid_name').innerHTML = uuid;
-  document.getElementById('status').innerHTML = "written data"
-}
-
-document.getElementById('write').addEventListener('click', function() {
-    // ble.write('UUID2', document.getElementById('write_value').value);
-    ble.write('UUID2', [0x31]);
-});
-
-//--------------------------------------------------
 // 画面描画
 //--------------------------------------------------
 window.onload = ()=>{
@@ -66,7 +35,9 @@ window.onload = ()=>{
     const ctx = canvas.getContext("2d");
 
     canvas.width = canvas_wrapper.offsetWidth;
-	canvas.height =  canvas_wrapper.offsetHeight * 1.5;
+    canvas.height =  canvas_wrapper.offsetHeight * 1.5;
+    
+    ble.setUUID("UUID2", "4fafc201-1fb5-459e-8fcc-c5c9c331914b", "beb5483e-36e1-4688-b7f5-ea07361b26a8");  //BLEnano SimpleControl tx_uuid
 
     //-------------------------------------
     // アニメーション開始
@@ -108,6 +79,39 @@ window.onload = ()=>{
         // },
         10})  // 10msec経過する毎に実行する
 }
+
+
+//--------------------------------------------------
+// BLE
+//--------------------------------------------------
+// window.onload = function () {
+//   //UUIDの設定
+//   //ble.setUUID("UUID1", "713d0000-503e-4c75-ba94-3148f18d941e", "713d0002-503e-4c75-ba94-3148f18d941e");  //BLEnano SimpleControl rx_uuid
+//   ble.setUUID("UUID2", "4fafc201-1fb5-459e-8fcc-c5c9c331914b", "beb5483e-36e1-4688-b7f5-ea07361b26a8");  //BLEnano SimpleControl tx_uuid
+// }
+
+ble.onScan = function (deviceName) {
+  document.getElementById('device_name').innerHTML = deviceName;
+  document.getElementById('status').innerHTML = "found device!";
+}
+
+ble.onConnectGATT = function (uuid) {
+  console.log('> connected GATT!');
+
+  document.getElementById('uuid_name').innerHTML = uuid;
+  document.getElementById('status').innerHTML = "connected GATT!";
+}
+
+ble.onWrite = function(uuid){
+  document.getElementById('uuid_name').innerHTML = uuid;
+  document.getElementById('status').innerHTML = "written data"
+}
+
+document.getElementById('write').addEventListener('click', function() {
+    // ble.write('UUID2', document.getElementById('write_value').value);
+    ble.write('UUID2', [0x31]);
+});
+
 
 //--------------------------------------------------
 // WebRTC
